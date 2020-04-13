@@ -62,4 +62,26 @@ body{
         z-index: 1;
     }
 
+
+    .navigation-bullets {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .bullet {
+            width: 10px;
+            overflow: hidden;
+            height: 10px;
+            border-radius: 100%;
+            background: white;
+            &.active{
+                background: green;
+            }
+
+            + .bullet {
+                margin-left: 6px;
+            }
+        }
+    }
+
 }

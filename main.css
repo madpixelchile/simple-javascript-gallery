@@ -75,3 +75,23 @@ body {
     height: 100%;
     opacity: 0;
     z-index: 1; }
+  .my-gallery-modal-wrap .navigation-bullets {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center; }
+    .my-gallery-modal-wrap .navigation-bullets .bullet {
+      width: 10px;
+      overflow: hidden;
+      height: 10px;
+      border-radius: 100%;
+      background: white; }
+      .my-gallery-modal-wrap .navigation-bullets .bullet.active {
+        background: green; }
+      .my-gallery-modal-wrap .navigation-bullets .bullet + .bullet {
+        margin-left: 6px; }

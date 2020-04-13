@@ -51,6 +51,8 @@ myGallery = ()=>{
 				<button class="gal-navigation gal-left-button" type="button" title="Ir a imagen anterior">Prev</button>
 				<button class="gal-navigation gal-right-button" type="button" title="Ir a imagen posterior">Next</button>
 			</div>
+			<div class="navigation-bullets">
+			</div>
 		</div>
 		<button class="close-overlay"></button>
 	
@@ -60,7 +62,7 @@ myGallery = ()=>{
 
 	for(let i = 0; myGalleryItem[i]; i ++){
 		const initImg = myGalleryItem[i];
-		const clonedImg = initImg.cloneNode(true);
+		const clonedImg = initImg.cloneNode(true); //Cloning element and behaviours
 		const putImgOnTarget = parent.parents(initImg,'.my-gallery').previousElementSibling.querySelector('.my-gallery-modal-img-group');
 		putImgOnTarget.appendChild(clonedImg);
 		
@@ -69,6 +71,15 @@ myGallery = ()=>{
 		const modalItems = putImgOnTarget.querySelectorAll('.item');
 		modalItems[i].classList = modalItems[i].classList + ' modal-item';
 		modalItems[i].setAttribute('data-index',i);
+
+		//Make bullets
+		const bulletTarget = document.querySelector('.navigation-bullets');
+		const newBullet = document.createElement('div');
+		newBullet.className = 'bullet';
+		//newBullet.innerHTML = `<button type="button"></button>`;
+
+		bulletTarget.appendChild(newBullet);
+
 	}
 
 	//Events
@@ -78,6 +89,8 @@ myGallery = ()=>{
 			const modalGallery = parent.parents(item,'.my-gallery').previousElementSibling;
 			const modalElementTarget = modalGallery.querySelectorAll('.modal-item');
 			const elementIndex = item.getAttribute('data-index');
+
+			const bulletTarget = modalGallery.querySelectorAll('.bullet');
 
 			modalGallery.style.display = 'block';
 
@@ -91,6 +104,15 @@ myGallery = ()=>{
 			modalElementTarget['' + elementIndex + ''].style.display = 'block';
 			modalElementTarget['' + elementIndex + ''].classList = modalElementTarget['' + elementIndex + ''].classList + ' active';
 
+			//Activate bullet
+			const allBullets = modalGallery.querySelectorAll('.bullet');
+
+			for(let i = 0; allBullets[i]; i++){
+				allBullets[i].setAttribute('bullet-index',i);
+				allBullets[i].classList.remove('active');
+			}
+			bulletTarget['' + elementIndex + ''].classList = bulletTarget['' + elementIndex + ''].classList + ' active';
+
 		}
 	}
 
@@ -103,8 +125,9 @@ myGallery = ()=>{
 			const modalItems	  		= modalParents.querySelectorAll('.modal-item');
 			const totalModalItems 		= modalParents.querySelectorAll('.modal-item').length;
 			const modalActiveItemIndex  = modalParents.querySelector('.active').getAttribute('data-index');
-			const modalActiveItem 		= modalParents.querySelector('.active');
+			//const modalActiveItem 		= modalParents.querySelector('.active');
 
+			const modalBullets 			= modalParents.querySelectorAll('.bullet');
 
 			if(item.classList.contains('gal-left-button')){
 				
@@ -115,11 +138,15 @@ myGallery = ()=>{
 					for(let i = 0; modalItems[i]; i ++){
 						modalItems[i].style.display = 'none';
 						modalItems[i].classList.remove('active');
+
+						modalBullets[i].classList.remove('active');
 					}
 					
 					modalParents.querySelectorAll('[data-index]')[''+ previousIndex +''].style.display = 'block';
 					modalParents.querySelectorAll('[data-index]')[''+ previousIndex +''].classList = modalParents.querySelectorAll('[data-index]')[''+ previousIndex +''].classList + ' active';
 	
+					modalBullets[''+ previousIndex +''].classList = modalBullets[''+ previousIndex +''].classList + ' active';
+
 				}
 			}
 
@@ -134,16 +161,37 @@ myGallery = ()=>{
 					for(let i = 0; modalItems[i]; i ++){
 						modalItems[i].style.display = 'none';
 						modalItems[i].classList.remove('active');
+
+						modalBullets[i].classList.remove('active');
 					}
 
 					modalParents.querySelectorAll('[data-index]')[''+ nextIndex +''].style.display = 'block';
 					modalParents.querySelectorAll('[data-index]')[''+ nextIndex +''].classList = modalParents.querySelectorAll('[data-index]')[''+ nextIndex +''].classList + ' active';
 	
-				}
+					modalBullets[''+ nextIndex +''].classList = modalBullets[''+ nextIndex +''].classList + ' active';
 
+				}
 
 			}
 
+		}
+
+		//Bullet navigation
+		if(item.classList.contains('bullet')){
+			const modalParents 	  		= parent.parents(item,'.my-gallery-modal-wrap');
+			const allBullets = item.parentElement.querySelectorAll('.bullet');
+			const bulletIndex = item.getAttribute('bullet-index');
+			const modalGalleryItems = modalParents.querySelectorAll('.modal-item');
+
+			for(let i = 0; allBullets[i]; i++){
+				allBullets[i].classList.remove('active');
+				modalGalleryItems[i].classList.remove('active');
+				modalGalleryItems[i].style.display = 'none';
+			}
+
+			item.classList = item.classList + ' active';
+			modalGalleryItems[''+ bulletIndex +''].style.display = 'block';
+			modalGalleryItems[''+ bulletIndex +''].classList = modalGalleryItems[''+ +''].classList + ' active';
 
 		}
 
@@ -168,6 +216,3 @@ myGallery = ()=>{
 
 
 }
-
-
-
